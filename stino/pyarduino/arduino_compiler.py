@@ -459,7 +459,9 @@ def gen_cpp_obj_pairs(src_path, build_path, sub_dir,
 
     path_pairs = []
     for cpp_file, obj_file in zip(cpp_files, obj_files):
-        if new_build or cpp_file.get_mtime() > obj_file.get_mtime():
+        h_file = cpp_file.get_path().rsplit( ".", 1 )[ 0 ] + '.h'
+        if new_build or cpp_file.get_mtime() > obj_file.get_mtime() \
+                or os.path.isfile(h_file) and os.path.getmtime(h_file) > obj_file.get_mtime():
             path_pair = (cpp_file.get_path(), obj_file.get_path())
             path_pairs.append(path_pair)
     return path_pairs
